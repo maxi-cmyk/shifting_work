@@ -62,3 +62,4 @@ Stop any old process and relaunch from the repository root with `npm run dev`. A
 ## Current boundary
 
 Task-to-gear sorting is intentionally not implemented. New tasks receive transparent sequential defaults—G1, G2, G3, up to G6—and users can still edit them manually. Content-based sorting remains deferred.
+# shifting_work
