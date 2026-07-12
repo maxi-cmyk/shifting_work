@@ -10,20 +10,11 @@ interface TaskDraft {
 interface TaskFormProps {
   editingTask?: Task | null;
   suggestedGear: DriveGear;
-  taskCount: number;
-  minimumTasks?: number;
   onSave: (draft: TaskDraft) => void;
   onCancelEdit: () => void;
 }
 
-export function TaskForm({
-  editingTask,
-  suggestedGear,
-  taskCount,
-  minimumTasks = 3,
-  onSave,
-  onCancelEdit,
-}: TaskFormProps) {
+export function TaskForm({ editingTask, suggestedGear, onSave, onCancelEdit }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [gear, setGear] = useState<DriveGear>(1);
   const [targetMinutes, setTargetMinutes] = useState(10);
@@ -75,28 +66,6 @@ export function TaskForm({
           <h2>{editingTask ? 'Edit task' : 'Add a task'}</h2>
         </div>
         <span className="section-index">01</span>
-      </div>
-
-      <div
-        className={`task-minimum ${taskCount >= minimumTasks ? 'is-ready' : ''}`}
-        role="status"
-        aria-live="polite"
-      >
-        <div className="task-minimum__meter" aria-hidden="true">
-          {Array.from({ length: minimumTasks }, (_, index) => (
-            <i key={index} className={index < taskCount ? 'is-filled' : ''} />
-          ))}
-        </div>
-        <p>
-          <strong>
-            {Math.min(taskCount, minimumTasks)} of {minimumTasks} tasks loaded
-          </strong>
-          <span>
-            {taskCount >= minimumTasks
-              ? 'Drive unlocked.'
-              : `Add ${minimumTasks - taskCount} more to start a session.`}
-          </span>
-        </p>
       </div>
 
       <label className="field field--wide">

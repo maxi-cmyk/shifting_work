@@ -334,54 +334,6 @@ kbd {
   font-size: 27px;
   font-weight: 500;
 }
-.task-minimum {
-  margin: -4px 0 18px;
-  padding: 12px 13px;
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid #393532;
-  background: rgba(216, 64, 50, 0.055);
-}
-.task-minimum__meter {
-  display: flex;
-  gap: 4px;
-}
-.task-minimum__meter i {
-  width: 18px;
-  height: 5px;
-  display: block;
-  background: #3b3c3b;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
-}
-.task-minimum__meter i.is-filled {
-  background: var(--red);
-  box-shadow: 0 0 8px rgba(216, 64, 50, 0.25);
-}
-.task-minimum p {
-  margin: 0;
-  display: grid;
-  gap: 1px;
-}
-.task-minimum strong {
-  font-family: var(--display);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.task-minimum span {
-  color: var(--muted);
-  font-size: 9px;
-}
-.task-minimum.is-ready {
-  border-color: #314138;
-  background: rgba(114, 169, 134, 0.06);
-}
-.task-minimum.is-ready .task-minimum__meter i {
-  background: var(--green);
-  box-shadow: 0 0 8px rgba(114, 169, 134, 0.22);
-}
 .field {
   display: grid;
   gap: 7px;

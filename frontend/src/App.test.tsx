@@ -39,22 +39,16 @@ describe('MVP task and gearbox flow', () => {
 
     await user.type(screen.getByLabelText('Task'), 'Outline launch notes');
     await user.click(screen.getByRole('button', { name: /add to queue/i }));
-    expect(
-      within(screen.getByRole('status')).getByText(/1 of 3 tasks loaded/i),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /1 of 3 tasks loaded/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /add three tasks/i })).toBeDisabled();
 
     await user.type(screen.getByLabelText('Task'), 'Review research');
     await user.click(screen.getByRole('button', { name: /add to queue/i }));
-    expect(
-      within(screen.getByRole('status')).getByText(/2 of 3 tasks loaded/i),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /2 of 3 tasks loaded/i })).toBeInTheDocument();
 
     await user.type(screen.getByLabelText('Task'), 'Build interaction');
     await user.click(screen.getByRole('button', { name: /add to queue/i }));
-    expect(
-      within(screen.getByRole('status')).getByText(/3 of 3 tasks loaded/i),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /engage a gear first/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /G1Outline launch notes/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /G2Review research/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /G3Build interaction/i })).toBeInTheDocument();

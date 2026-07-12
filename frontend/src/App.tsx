@@ -16,6 +16,7 @@ import {
   type Task,
 } from './domain';
 import { loadState, saveState } from './persistence';
+import { useSound } from './hooks/useSound';
 
 type View = 'drive' | 'history' | 'settings';
 
@@ -115,6 +116,7 @@ export function App() {
   const [recommendation, setRecommendation] = useState<Recommendation | null>(null);
   const [onboardingShifted, setOnboardingShifted] = useState(false);
   const isFocusSessionActive = Boolean(state.activeSession);
+  const sound = useSound(state.preferences.soundEnabled);
 
   useEffect(() => saveState(state), [state]);
 
@@ -258,6 +260,7 @@ export function App() {
       };
     });
     setLeverGear(nextGear);
+    sound.playGateEngage(nextGear);
     setSelectedTaskId(nextTask.id);
     setNow(Date.now());
     setRecommendation(null);
@@ -275,6 +278,8 @@ export function App() {
       }
     }
     setLeverGear(nextGear);
+    if (nextGear > 0) sound.playGateEngage(nextGear);
+    else sound.playNeutralClick();
     if (!state.activeSession) return;
     const at = new Date().toISOString();
     patchState((current) => {
@@ -312,6 +317,7 @@ export function App() {
     }));
     setNow(Date.now());
     setRecommendation(null);
+    sound.playSessionStart();
   };
 
   const finish = (abandoned: boolean) => {
@@ -327,8 +333,11 @@ export function App() {
       outcome: abandoned ? 'abandoned' : getOutcome(elapsed, targetSeconds),
       completedAt: new Date().toISOString(),
     };
-    if (!abandoned)
+    if (!abandoned) {
       setRecommendation(getRecommendation(elapsed, targetSeconds, state.activeSession.currentGear));
+      sound.playRecommendation();
+    }
+    sound.playSessionEnd();
     patchState((current) => ({
       ...current,
       tasks: current.tasks.map((task) =>
@@ -452,7 +461,6 @@ export function App() {
               <TaskForm
                 editingTask={editingTask}
                 suggestedGear={nextSuggestedGear}
-                taskCount={state.tasks.length}
                 onSave={saveTask}
                 onCancelEdit={() => setEditingTaskId(null)}
               />
@@ -645,6 +653,9 @@ export function App() {
                     onClick={() => {
                       setLeverGear(recommendation.suggestedGear);
                       setRecommendation(null);
+                      if (recommendation.suggestedGear > 0)
+                        sound.playGateEngage(recommendation.suggestedGear);
+                      else sound.playNeutralClick();
                     }}
                   >
                     {recommendation.suggestedGear === 0
