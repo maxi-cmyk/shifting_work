@@ -1,65 +1,36 @@
 # Shiftwork
 
-A desktop productivity MVP controlled through a six-speed manual gearbox. Load at least three tasks, let each new task advance to the next gear by default, engage the H-pattern lever, and adjust your pace manually while the app tracks time and offers non-blocking shift recommendations.
+A desktop productivity app built around a six-speed manual gearbox. Load your tasks, assign each one a gear, and work through your day by shifting through an H-pattern lever — making pace feel deliberate and physical.
 
-## Run locally
+## Quick start
 
 ```bash
 npm install
 npm run dev
 ```
 
-The root command starts both workflows: Vite serves `frontend/`, then `backend/` opens the Electron window. Do not double-click `frontend/index.html`; it is a Vite source entrypoint rather than a standalone page.
+This launches both the Vite dev server and the Electron window. The app requires at least three tasks before you can start a focus session.
 
-To run only one side during development:
+## Scripts
 
-```bash
-npm run dev:frontend
-npm run dev:backend
-```
+| Command                | Description                                    |
+| ---------------------- | ---------------------------------------------- |
+| `npm run dev`          | Start frontend + backend in development mode   |
+| `npm run dev:frontend` | Vite dev server only (http://127.0.0.1:5173)   |
+| `npm run dev:backend`  | Electron window pointed at the Vite dev server |
+| `npm run dev:web`      | Vite dev server only (alias)                   |
+| `npm start`            | Build and run the production Electron renderer |
+| `npm run build`        | TypeScript build + production Vite bundle      |
+| `npm run test`         | Run all 16 unit/component tests                |
+| `npm run typecheck`    | TypeScript type checking                       |
+| `npm run check`        | Full CI: typecheck + tests + production build  |
 
-To build and run the production renderer in Electron:
+## Docs
 
-```bash
-npm start
-```
+- [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md) — product premise, gear model, data model, scope, and visual system.
+- [`backend/README.md`](./backend/README.md) — Electron main process and build scripts.
+- [`frontend/README.md`](./frontend/README.md) — React renderer, components, and tests.
 
-If the shell has `ELECTRON_RUN_AS_NODE=1` set, remove that environment override before launching Electron.
+## Tech stack
 
-## Verify
-
-```bash
-npm run check
-```
-
-This runs the TypeScript build, 16 unit/component tests, and the production Vite build.
-
-## Project documents
-
-- [`PROJECT_OVERVIEW.md`](./PROJECT_OVERVIEW.md) — product premise, scope, behavior, and data model.
-- [`TASKS.md`](./TASKS.md) — completed MVP sheet and deferred sorting work.
-- [`PROGRESS.md`](./PROGRESS.md) — decision log, verification evidence, and known limitations.
-
-## Repository structure
-
-```text
-frontend/
-  index.html          Vite renderer entry
-  src/                React UI, gearbox, state, persistence, tests
-  vite.config.ts      Frontend dev/build/test configuration
-
-backend/
-  electron/           Electron main process and isolated preload
-  scripts/            Build cleanup and Electron visual smoke checks
-
-dist/frontend/        Generated production renderer; never edit directly
-```
-
-## If the window looks unstyled
-
-Stop any old process and relaunch from the repository root with `npm run dev`. A stale pre-split `dist/index.html` is no longer generated; every build cleans `dist/` first. The development CSP now permits Vite’s runtime CSS injection while keeping scripts restricted to local application sources.
-
-## Current boundary
-
-Task-to-gear sorting is intentionally not implemented. New tasks receive transparent sequential defaults—G1, G2, G3, up to G6—and users can still edit them manually. Content-based sorting remains deferred.
-# shifting_work
+Electron 43 · React 19 · TypeScript 7 · Vite 8 · Vitest 4

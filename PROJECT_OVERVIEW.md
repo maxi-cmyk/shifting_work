@@ -36,14 +36,14 @@ These assumptions were proposed during the clarification pass and remain revisab
 
 ## Gear model for the MVP
 
-| Gear | Label | Intent | Default target |
-| --- | --- | --- | ---: |
-| 1 | Ignition | Start with something small and remove inertia | 10 min |
-| 2 | Roll | Light, routine progress | 20 min |
-| 3 | Cruise | Sustained everyday focus | 30 min |
-| 4 | Drive | Complex, distraction-free work | 45 min |
-| 5 | Push | High-output deep work | 60 min |
-| 6 | Sprint | Short, maximum-intensity finish | 30 min |
+| Gear | Label    | Intent                                        | Default target |
+| ---- | -------- | --------------------------------------------- | -------------: |
+| 1    | Ignition | Start with something small and remove inertia |         10 min |
+| 2    | Roll     | Light, routine progress                       |         20 min |
+| 3    | Cruise   | Sustained everyday focus                      |         30 min |
+| 4    | Drive    | Complex, distraction-free work                |         45 min |
+| 5    | Push     | High-output deep work                         |         60 min |
+| 6    | Sprint   | Short, maximum-intensity finish               |         30 min |
 
 Sixth gear is deliberately shorter than fifth: it represents intensity, not endurance. Targets can be edited per task.
 

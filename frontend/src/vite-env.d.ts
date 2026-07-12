@@ -2,7 +2,7 @@
 
 interface Window {
   shiftworkDesktop?: {
-    platform: string
-    setFullscreen: (enabled: boolean) => Promise<void>
-  }
+    platform: string;
+    setFullscreen: (enabled: boolean) => Promise<void>;
+  };
 }

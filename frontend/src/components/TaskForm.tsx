@@ -1,64 +1,71 @@
-import { useEffect, useState, type FormEvent } from 'react'
-import { gearDetails, type DriveGear, type Task } from '../domain'
+import { useEffect, useState, type FormEvent } from 'react';
+import { gearDetails, type DriveGear, type Task } from '../domain';
 
 interface TaskDraft {
-  title: string
-  gear: DriveGear
-  targetMinutes: number
+  title: string;
+  gear: DriveGear;
+  targetMinutes: number;
 }
 
 interface TaskFormProps {
-  editingTask?: Task | null
-  suggestedGear: DriveGear
-  taskCount: number
-  minimumTasks?: number
-  onSave: (draft: TaskDraft) => void
-  onCancelEdit: () => void
+  editingTask?: Task | null;
+  suggestedGear: DriveGear;
+  taskCount: number;
+  minimumTasks?: number;
+  onSave: (draft: TaskDraft) => void;
+  onCancelEdit: () => void;
 }
 
-export function TaskForm({ editingTask, suggestedGear, taskCount, minimumTasks = 3, onSave, onCancelEdit }: TaskFormProps) {
-  const [title, setTitle] = useState('')
-  const [gear, setGear] = useState<DriveGear>(1)
-  const [targetMinutes, setTargetMinutes] = useState(10)
-  const [error, setError] = useState('')
+export function TaskForm({
+  editingTask,
+  suggestedGear,
+  taskCount,
+  minimumTasks = 3,
+  onSave,
+  onCancelEdit,
+}: TaskFormProps) {
+  const [title, setTitle] = useState('');
+  const [gear, setGear] = useState<DriveGear>(1);
+  const [targetMinutes, setTargetMinutes] = useState(10);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (editingTask) {
-      setTitle(editingTask.title)
-      setGear(editingTask.gear)
-      setTargetMinutes(editingTask.targetMinutes)
+      setTitle(editingTask.title);
+      setGear(editingTask.gear);
+      setTargetMinutes(editingTask.targetMinutes);
     } else {
-      setTitle('')
-      setGear(suggestedGear)
-      setTargetMinutes(gearDetails[suggestedGear].targetMinutes)
+      setTitle('');
+      setGear(suggestedGear);
+      setTargetMinutes(gearDetails[suggestedGear].targetMinutes);
     }
-    setError('')
-  }, [editingTask, suggestedGear])
+    setError('');
+  }, [editingTask, suggestedGear]);
 
   const changeGear = (nextGear: DriveGear) => {
-    setGear(nextGear)
+    setGear(nextGear);
     if (!editingTask || targetMinutes === gearDetails[gear].targetMinutes) {
-      setTargetMinutes(gearDetails[nextGear].targetMinutes)
+      setTargetMinutes(gearDetails[nextGear].targetMinutes);
     }
-  }
+  };
 
   const submit = (event: FormEvent) => {
-    event.preventDefault()
-    const cleanTitle = title.trim()
+    event.preventDefault();
+    const cleanTitle = title.trim();
     if (!cleanTitle) {
-      setError('Give this task a clear name before adding it to the drive.')
-      return
+      setError('Give this task a clear name before adding it to the drive.');
+      return;
     }
     if (!Number.isFinite(targetMinutes) || targetMinutes < 1 || targetMinutes > 480) {
-      setError('Choose a target between 1 minute and 8 hours.')
-      return
+      setError('Choose a target between 1 minute and 8 hours.');
+      return;
     }
-    onSave({ title: cleanTitle, gear, targetMinutes })
+    onSave({ title: cleanTitle, gear, targetMinutes });
     if (!editingTask) {
-      setTitle('')
+      setTitle('');
     }
-    setError('')
-  }
+    setError('');
+  };
 
   return (
     <form className="task-form" onSubmit={submit} noValidate>
@@ -70,13 +77,25 @@ export function TaskForm({ editingTask, suggestedGear, taskCount, minimumTasks =
         <span className="section-index">01</span>
       </div>
 
-      <div className={`task-minimum ${taskCount >= minimumTasks ? 'is-ready' : ''}`} role="status" aria-live="polite">
+      <div
+        className={`task-minimum ${taskCount >= minimumTasks ? 'is-ready' : ''}`}
+        role="status"
+        aria-live="polite"
+      >
         <div className="task-minimum__meter" aria-hidden="true">
-          {Array.from({ length: minimumTasks }, (_, index) => <i key={index} className={index < taskCount ? 'is-filled' : ''} />)}
+          {Array.from({ length: minimumTasks }, (_, index) => (
+            <i key={index} className={index < taskCount ? 'is-filled' : ''} />
+          ))}
         </div>
         <p>
-          <strong>{Math.min(taskCount, minimumTasks)} of {minimumTasks} tasks loaded</strong>
-          <span>{taskCount >= minimumTasks ? 'Drive unlocked.' : `Add ${minimumTasks - taskCount} more to start a session.`}</span>
+          <strong>
+            {Math.min(taskCount, minimumTasks)} of {minimumTasks} tasks loaded
+          </strong>
+          <span>
+            {taskCount >= minimumTasks
+              ? 'Drive unlocked.'
+              : `Add ${minimumTasks - taskCount} more to start a session.`}
+          </span>
         </p>
       </div>
 
@@ -92,7 +111,9 @@ export function TaskForm({ editingTask, suggestedGear, taskCount, minimumTasks =
       </label>
 
       <fieldset className="gear-choice">
-        <legend>{editingTask ? 'Planned gear' : `Auto-selected next gear · G${suggestedGear}`}</legend>
+        <legend>
+          {editingTask ? 'Planned gear' : `Auto-selected next gear · G${suggestedGear}`}
+        </legend>
         <div className="gear-choice__grid">
           {([1, 2, 3, 4, 5, 6] as DriveGear[]).map((value) => (
             <button
@@ -120,13 +141,25 @@ export function TaskForm({ editingTask, suggestedGear, taskCount, minimumTasks =
         />
       </label>
 
-      <p className="gear-intent">G{gear} · {gearDetails[gear].intent}</p>
-      {error && <p className="form-error" id="task-error" role="alert">{error}</p>}
+      <p className="gear-intent">
+        G{gear} · {gearDetails[gear].intent}
+      </p>
+      {error && (
+        <p className="form-error" id="task-error" role="alert">
+          {error}
+        </p>
+      )}
 
       <div className="form-actions">
-        {editingTask && <button type="button" className="button button--ghost" onClick={onCancelEdit}>Cancel</button>}
-        <button type="submit" className="button button--primary">{editingTask ? 'Save changes' : 'Add to queue'}</button>
+        {editingTask && (
+          <button type="button" className="button button--ghost" onClick={onCancelEdit}>
+            Cancel
+          </button>
+        )}
+        <button type="submit" className="button button--primary">
+          {editingTask ? 'Save changes' : 'Add to queue'}
+        </button>
       </div>
     </form>
-  )
+  );
 }

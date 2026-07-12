@@ -1,6 +1,6 @@
-import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
-import { fileURLToPath } from 'node:url'
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
@@ -20,4 +20,4 @@ export default defineConfig({
     outDir: '../dist/frontend',
     emptyOutDir: true,
   },
-})
+});

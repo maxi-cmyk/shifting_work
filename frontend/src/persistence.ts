@@ -1,18 +1,25 @@
-import { initialState, type AppState, type DriveGear, type Gear, type SessionRecord, type Task } from './domain'
+import {
+  initialState,
+  type AppState,
+  type DriveGear,
+  type Gear,
+  type SessionRecord,
+  type Task,
+} from './domain';
 
-export const STORAGE_KEY = 'shiftwork.mvp.state.v1'
+export const STORAGE_KEY = 'shiftwork.mvp.state.v1';
 
 const validGear = (value: unknown): value is Gear =>
-  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 6
+  typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= 6;
 
-const validDriveGear = (value: unknown): value is DriveGear => validGear(value) && value !== 0
+const validDriveGear = (value: unknown): value is DriveGear => validGear(value) && value !== 0;
 
 function parseTasks(value: unknown): Task[] {
-  if (!Array.isArray(value)) return []
+  if (!Array.isArray(value)) return [];
   return value
     .filter((candidate): candidate is Task => {
-      if (!candidate || typeof candidate !== 'object') return false
-      const task = candidate as Partial<Task>
+      if (!candidate || typeof candidate !== 'object') return false;
+      const task = candidate as Partial<Task>;
       return (
         typeof task.id === 'string' &&
         typeof task.title === 'string' &&
@@ -23,16 +30,16 @@ function parseTasks(value: unknown): Task[] {
         ['queued', 'active', 'completed'].includes(task.status ?? '') &&
         typeof task.position === 'number' &&
         typeof task.createdAt === 'string'
-      )
+      );
     })
-    .sort((a, b) => a.position - b.position)
+    .sort((a, b) => a.position - b.position);
 }
 
 function parseHistory(value: unknown): SessionRecord[] {
-  if (!Array.isArray(value)) return []
+  if (!Array.isArray(value)) return [];
   return value.filter((candidate): candidate is SessionRecord => {
-    if (!candidate || typeof candidate !== 'object') return false
-    const record = candidate as Partial<SessionRecord>
+    if (!candidate || typeof candidate !== 'object') return false;
+    const record = candidate as Partial<SessionRecord>;
     return (
       typeof record.id === 'string' &&
       typeof record.taskTitle === 'string' &&
@@ -42,16 +49,16 @@ function parseHistory(value: unknown): SessionRecord[] {
       typeof record.elapsedSeconds === 'number' &&
       ['early', 'on-target', 'overrun', 'abandoned'].includes(record.outcome ?? '') &&
       typeof record.completedAt === 'string'
-    )
-  })
+    );
+  });
 }
 
 export function loadState(storage: Pick<Storage, 'getItem'> = window.localStorage): AppState {
   try {
-    const raw = storage.getItem(STORAGE_KEY)
-    if (!raw) return initialState
-    const parsed = JSON.parse(raw) as Partial<AppState>
-    const active = parsed.activeSession
+    const raw = storage.getItem(STORAGE_KEY);
+    if (!raw) return initialState;
+    const parsed = JSON.parse(raw) as Partial<AppState>;
+    const active = parsed.activeSession;
     const validActive =
       active &&
       typeof active.taskId === 'string' &&
@@ -62,13 +69,16 @@ export function loadState(storage: Pick<Storage, 'getItem'> = window.localStorag
             accumulatedSeconds:
               active.accumulatedSeconds +
               (active.isRunning && active.lastStartedAt
-                ? Math.max(0, Math.floor((Date.now() - new Date(active.lastStartedAt).getTime()) / 1000))
+                ? Math.max(
+                    0,
+                    Math.floor((Date.now() - new Date(active.lastStartedAt).getTime()) / 1000),
+                  )
                 : 0),
             isRunning: false,
             lastStartedAt: null,
             currentGear: 0 as const,
           }
-        : null
+        : null;
 
     return {
       tasks: parseTasks(parsed.tasks),
@@ -79,12 +89,15 @@ export function loadState(storage: Pick<Storage, 'getItem'> = window.localStorag
         soundEnabled: Boolean(parsed.preferences?.soundEnabled),
         reducedMotion: Boolean(parsed.preferences?.reducedMotion),
       },
-    }
+    };
   } catch {
-    return initialState
+    return initialState;
   }
 }
 
-export function saveState(state: AppState, storage: Pick<Storage, 'setItem'> = window.localStorage): void {
-  storage.setItem(STORAGE_KEY, JSON.stringify(state))
+export function saveState(
+  state: AppState,
+  storage: Pick<Storage, 'setItem'> = window.localStorage,
+): void {
+  storage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
