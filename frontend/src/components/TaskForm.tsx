@@ -81,7 +81,7 @@ export function TaskForm({ editingTask, suggestedGear, onSave, onCancelEdit }: T
 
       <fieldset className="gear-choice">
         <legend>
-          {editingTask ? 'Planned gear' : `Auto-selected next gear · G${suggestedGear}`}
+          {editingTask ? 'Planned gear' : `Auto-selected next gear · Gear ${suggestedGear}`}
         </legend>
         <div className="gear-choice__grid">
           {([1, 2, 3, 4, 5, 6] as DriveGear[]).map((value) => (
@@ -111,7 +111,7 @@ export function TaskForm({ editingTask, suggestedGear, onSave, onCancelEdit }: T
       </label>
 
       <p className="gear-intent">
-        G{gear} · {gearDetails[gear].intent}
+        Gear {gear} · {gearDetails[gear].intent}
       </p>
       {error && (
         <p className="form-error" id="task-error" role="alert">

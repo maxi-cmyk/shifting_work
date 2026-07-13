@@ -212,28 +212,6 @@ kbd {
   background: var(--red);
   box-shadow: 0 0 12px rgba(216, 64, 50, 0.6);
 }
-.sidebar__status {
-  margin-top: auto;
-  padding: 20px 0 26px;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-  text-align: center;
-}
-.sidebar__status div {
-  display: grid;
-  gap: 1px;
-}
-.sidebar__status small {
-  color: var(--faint);
-  font-size: 9px;
-  text-transform: uppercase;
-}
-.sidebar__status strong {
-  font-family: var(--display);
-  font-size: 11px;
-  font-weight: 500;
-}
 .status-light {
   width: 8px;
   height: 8px;
@@ -563,15 +541,19 @@ kbd {
   font-size: 9px;
 }
 .task-gear {
-  width: 34px;
-  height: 34px;
+  min-width: 40px;
+  height: 28px;
   display: grid;
   place-items: center;
-  border-radius: 50%;
+  border-radius: 14px;
   border: 1px solid #4b4d4e;
+  padding: 0 8px;
   color: #d6d4cd;
   font-family: var(--display);
-  font-size: 14px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 .task-list__actions {
   display: flex;

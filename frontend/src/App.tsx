@@ -376,11 +376,8 @@ export function App() {
   );
   const completedCount = state.tasks.filter((task) => task.status === 'completed').length;
   const driveUnlocked = state.tasks.length >= 3;
-  const highestAssignedGear = state.tasks.reduce(
-    (highest, task) => Math.max(highest, task.gear),
-    0,
-  );
-  const nextSuggestedGear = Math.min(highestAssignedGear + 1, 6) as DriveGear;
+  const lastTaskGear = state.tasks.length > 0 ? state.tasks[state.tasks.length - 1].gear : 0;
+  const nextSuggestedGear = (lastTaskGear === 0 ? 1 : (lastTaskGear % 6) + 1) as DriveGear;
 
   if (state.activeSession && activeTask) {
     return (
@@ -431,13 +428,6 @@ export function App() {
             <span>Settings</span>
           </button>
         </nav>
-        <div className="sidebar__status">
-          <span className={`status-light ${state.activeSession?.isRunning ? 'is-live' : ''}`} />
-          <div>
-            <small>System</small>
-            <strong>{state.activeSession?.isRunning ? 'In motion' : 'Ready'}</strong>
-          </div>
-        </div>
       </aside>
 
       <main id="main-content" className="main-content">
@@ -477,7 +467,7 @@ export function App() {
                     <span>Active</span>
                     <strong>{activeTask.title}</strong>
                     <small>
-                      G{activeTask.gear} · {activeTask.targetMinutes} min
+                      Gear {activeTask.gear} · {activeTask.targetMinutes} min
                     </small>
                   </div>
                 )}
@@ -498,7 +488,7 @@ export function App() {
                           onClick={() => setSelectedTaskId(task.id)}
                           aria-pressed={selectedTaskId === task.id}
                         >
-                          <span className="task-gear">G{task.gear}</span>
+                          <span className="task-gear">Gear {task.gear}</span>
                           <span>
                             <strong>{task.title}</strong>
                             <small>
@@ -559,9 +549,9 @@ export function App() {
                 <h2>{activeTask?.title ?? selectedTask?.title ?? 'Load your first task'}</h2>
                 <p>
                   {activeTask
-                    ? `Planned G${activeTask.gear} · ${gearDetails[activeTask.gear].label}`
+                    ? `Planned Gear ${activeTask.gear} · ${gearDetails[activeTask.gear].label}`
                     : selectedTask
-                      ? `Planned G${selectedTask.gear} · ${selectedTask.targetMinutes} minute target`
+                      ? `Planned Gear ${selectedTask.gear} · ${selectedTask.targetMinutes} minute target`
                       : 'Add a task, choose it from the queue, then engage a gear.'}
                 </p>
               </div>
@@ -660,7 +650,7 @@ export function App() {
                   >
                     {recommendation.suggestedGear === 0
                       ? 'Take neutral'
-                      : `Prepare G${recommendation.suggestedGear}`}
+                      : `Prepare Gear ${recommendation.suggestedGear}`}
                   </button>
                 </aside>
               )}
@@ -791,7 +781,7 @@ function FocusMode({
       <button className="focus-mode__advance" onClick={onAdvance}>
         <span>
           <small>
-            {nextTask ? `Next: G${nextTask.gear} · ${nextTask.title}` : 'Route complete'}
+            {nextTask ? `Next: Gear ${nextTask.gear} · ${nextTask.title}` : 'Route complete'}
           </small>
           {nextTask ? 'Move to next gear' : 'Complete final task'}
         </span>
@@ -830,7 +820,7 @@ function HistoryView({ history }: { history: SessionRecord[] }) {
             <div className="history-row" role="row" key={record.id}>
               <strong>{record.taskTitle}</strong>
               <span>
-                G{record.plannedGear} · {formatDuration(record.targetSeconds)}
+                Gear {record.plannedGear} · {formatDuration(record.targetSeconds)}
               </span>
               <span>{formatDuration(record.elapsedSeconds)}</span>
               <span className={`outcome outcome--${record.outcome}`}>

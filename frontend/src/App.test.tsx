@@ -49,11 +49,11 @@ describe('MVP task and gearbox flow', () => {
     await user.type(screen.getByLabelText('Task'), 'Build interaction');
     await user.click(screen.getByRole('button', { name: /add to queue/i }));
     expect(screen.getByRole('button', { name: /engage a gear first/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /G1Outline launch notes/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /G2Review research/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /G3Build interaction/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Gear 1Outline launch notes/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Gear 2Review research/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Gear 3Build interaction/i })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /G1Outline launch notes/i }));
+    await user.click(screen.getByRole('button', { name: /Gear 1Outline launch notes/i }));
     const start = screen.getByRole('button', { name: /start session/i });
     await user.click(screen.getByRole('button', { name: /engage gear 1/i }));
     expect(start).toBeEnabled();
@@ -130,7 +130,7 @@ describe('MVP task and gearbox flow', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: /exit focus/i }));
     expect(screen.getByLabelText('Primary navigation')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /G1Active task/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Gear 1Active task/i })).toBeInTheDocument();
   });
 
   it('supports number-key shifting outside form controls', () => {
