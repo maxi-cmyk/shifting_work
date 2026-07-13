@@ -134,6 +134,18 @@ export function Gearbox({
     if (!lever) return;
     animationRef.current?.cancel();
     stemAnimationRef.current?.cancel();
+
+    if (animationRef.current) {
+      const rect = lever.getBoundingClientRect();
+      const trackRect = trackRef.current?.getBoundingClientRect();
+      if (rect && trackRect) {
+        visualPointRef.current = {
+          x: ((rect.left + rect.width / 2 - trackRect.left) / trackRect.width) * 100,
+          y: ((rect.top + rect.height / 2 - trackRect.top) / trackRect.height) * 100,
+        };
+      }
+    }
+
     const route = routeAlongGate(visualPointRef.current, targetGear);
     const target = gatePositions[targetGear];
     railRef.current = railForGear(targetGear);
@@ -156,8 +168,8 @@ export function Gearbox({
       };
     });
     const timing: KeyframeAnimationOptions = {
-      duration: Math.max(120, (route.length - 1) * 95),
-      easing: 'cubic-bezier(.22,.8,.25,1)',
+      duration: Math.max(100, (route.length - 1) * 75),
+      easing: 'cubic-bezier(0, 0.7, 0.3, 1)',
       fill: 'forwards',
     };
     const animation = lever.animate(keyframes, timing);
@@ -183,9 +195,11 @@ export function Gearbox({
     }
     animationRef.current = animation;
     animation.onfinish = () => {
-      applyPoint(target);
-      animation.cancel();
-      stemAnimationRef.current?.cancel();
+      visualPointRef.current = target;
+      lever.classList.toggle(
+        'is-neutral',
+        Math.abs(target.x - 50) < 1 && Math.abs(target.y - 50) < 1,
+      );
       stemAnimationRef.current = null;
       animationRef.current = null;
     };

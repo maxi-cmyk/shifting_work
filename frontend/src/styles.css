@@ -998,6 +998,7 @@ kbd {
   pointer-events: none;
   will-change: transform;
   transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0, 0.7, 0.3, 1);
 }
 .shift-lever__stem {
   position: absolute;
@@ -1018,7 +1019,9 @@ kbd {
     #020303 100%
   );
   box-shadow: 4px 6px 9px rgba(0, 0, 0, 0.78);
-  transition: opacity 90ms ease;
+  transition:
+    opacity 90ms ease,
+    transform 180ms cubic-bezier(0, 0.7, 0.3, 1);
 }
 .shift-lever.is-neutral .shift-lever__stem {
   opacity: 0;
