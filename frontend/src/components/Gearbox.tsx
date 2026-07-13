@@ -163,10 +163,22 @@ export function Gearbox({
     const animation = lever.animate(keyframes, timing);
     const stem = lever.querySelector<HTMLElement>('.shift-lever__stem');
     if (stem && typeof stem.animate === 'function') {
-      const stemKeyframes = route.map((point, index) => ({
-        transform: `rotate(${Math.atan2(point.y - 50, point.x - 50) * (180 / Math.PI) + 90}deg)`,
-        offset: keyframes[index].offset,
-      }));
+      let prevAngle =
+        visualPointRef.current.y === 50 && visualPointRef.current.x === 50
+          ? 0
+          : Math.atan2(visualPointRef.current.y - 50, visualPointRef.current.x - 50) *
+              (180 / Math.PI) +
+            90;
+      const stemKeyframes = route.map((point, index) => {
+        const dx = point.x - 50;
+        const dy = point.y - 50;
+        const angle = dx === 0 && dy === 0 ? prevAngle : Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+        prevAngle = angle;
+        return {
+          transform: `rotate(${angle}deg)`,
+          offset: keyframes[index].offset,
+        };
+      });
       stemAnimationRef.current = stem.animate(stemKeyframes, timing);
     }
     animationRef.current = animation;
