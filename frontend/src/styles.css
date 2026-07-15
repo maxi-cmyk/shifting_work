@@ -788,6 +788,9 @@ kbd {
 .shift-gate.is-dragging .shift-lever__stem {
   transition: none !important;
 }
+.shift-gate.is-dragging .shift-lever__stem {
+  opacity: 0;
+}
 .shift-gate::before {
   content: '';
   position: absolute;
