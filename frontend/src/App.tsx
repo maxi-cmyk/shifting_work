@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FocusMode } from './components/FocusMode';
 import { Gearbox } from './components/Gearbox';
 import { HistoryView } from './components/HistoryView';
@@ -78,8 +78,13 @@ export function App() {
     sound,
   });
 
+  const kbd = useRef({ handleShift, startSession, completeSession, state, activeTask });
+  kbd.current = { handleShift, startSession, completeSession, state, activeTask };
+
   useEffect(() => {
     const handleKeyboard = (event: KeyboardEvent) => {
+      if (event.repeat) return;
+      const { handleShift, startSession, completeSession, state, activeTask } = kbd.current;
       const target = event.target;
       if (
         target instanceof HTMLElement &&
@@ -104,7 +109,7 @@ export function App() {
     };
     window.addEventListener('keydown', handleKeyboard);
     return () => window.removeEventListener('keydown', handleKeyboard);
-  });
+  }, []);
 
   const currentElapsed = state.activeSession ? elapsedSeconds(state.activeSession, now) : 0;
   const targetSeconds = activeTask ? activeTask.targetMinutes * 60 : 0;

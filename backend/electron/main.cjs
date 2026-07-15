@@ -25,11 +25,17 @@ const createWindow = () => {
     return { action: 'deny' };
   });
 
-  if (process.env.VITE_DEV_SERVER_URL) {
-    window.loadURL(process.env.VITE_DEV_SERVER_URL);
-  } else {
-    window.loadFile(path.join(__dirname, '..', '..', 'dist', 'frontend', 'index.html'));
-  }
+  const loadPromise = process.env.VITE_DEV_SERVER_URL
+    ? window.loadURL(process.env.VITE_DEV_SERVER_URL)
+    : window.loadFile(path.join(__dirname, '..', '..', 'dist', 'frontend', 'index.html'));
+  loadPromise.catch((err) => {
+    console.error('Failed to load renderer:', err.message);
+    window
+      .loadURL(
+        `data:text/html,<h1 style="color:#d84032;padding:40px;font-family:sans-serif">Failed to load Shiftwork</h1>`,
+      )
+      .catch(() => {});
+  });
 };
 
 app.whenReady().then(() => {

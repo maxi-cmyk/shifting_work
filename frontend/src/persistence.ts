@@ -99,5 +99,9 @@ export function saveState(
   state: AppState,
   storage: Pick<Storage, 'setItem'> = window.localStorage,
 ): void {
-  storage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    storage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    console.warn('Shiftwork: failed to save state. Storage may be full or unavailable.');
+  }
 }

@@ -224,6 +224,13 @@ export function Gearbox({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      animationRef.current?.cancel();
+      stemAnimationRef.current?.cancel();
+    };
+  }, []);
+
   const pointFromEvent = (event: PointerEvent<HTMLDivElement>): Point => {
     const rect = trackRef.current!.getBoundingClientRect();
     return {
