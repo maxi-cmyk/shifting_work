@@ -132,8 +132,6 @@ export function Gearbox({
   const animateToGear = (targetGear: Gear) => {
     const lever = leverRef.current;
     if (!lever) return;
-    animationRef.current?.cancel();
-    stemAnimationRef.current?.cancel();
 
     if (animationRef.current) {
       const rect = lever.getBoundingClientRect();
@@ -145,6 +143,9 @@ export function Gearbox({
         };
       }
     }
+
+    animationRef.current?.cancel();
+    stemAnimationRef.current?.cancel();
 
     const route = routeAlongGate(visualPointRef.current, targetGear);
     const target = gatePositions[targetGear];
@@ -195,13 +196,20 @@ export function Gearbox({
     }
     animationRef.current = animation;
     animation.onfinish = () => {
-      visualPointRef.current = target;
+      animation.commitStyles();
+      animation.cancel();
+      stemAnimationRef.current?.commitStyles();
+      stemAnimationRef.current?.cancel();
+      stemAnimationRef.current = null;
+      animationRef.current = null;
+
+      const angle = Math.atan2(target.y - 50, target.x - 50) * (180 / Math.PI) + 90;
+      lever.style.setProperty('--lever-angle', `${angle}deg`);
       lever.classList.toggle(
         'is-neutral',
         Math.abs(target.x - 50) < 1 && Math.abs(target.y - 50) < 1,
       );
-      stemAnimationRef.current = null;
-      animationRef.current = null;
+      visualPointRef.current = target;
     };
   };
 

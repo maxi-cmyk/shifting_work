@@ -784,6 +784,10 @@ kbd {
 .shift-gate.is-dragging {
   cursor: grabbing;
 }
+.shift-gate.is-dragging .shift-lever,
+.shift-gate.is-dragging .shift-lever__stem {
+  transition: none !important;
+}
 .shift-gate::before {
   content: '';
   position: absolute;
