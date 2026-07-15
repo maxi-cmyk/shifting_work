@@ -604,22 +604,6 @@ kbd {
   );
   mix-blend-mode: screen;
 }
-.cockpit__topline {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #303234;
-  color: #777975;
-  font-family: var(--display);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.serial {
-  font-variant-numeric: tabular-nums;
-}
 .session-readout {
   position: relative;
   z-index: 1;
@@ -1467,10 +1451,15 @@ kbd {
   text-transform: uppercase;
   white-space: nowrap;
 }
-.focus-mode__timer {
+.focus-mode__timer-group {
   position: relative;
   z-index: 1;
   justify-self: center;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.focus-mode__timer {
   font-family: var(--display);
   font-size: clamp(96px, 13vw, 220px);
   font-weight: 500;
@@ -1479,8 +1468,41 @@ kbd {
   line-height: 0.8;
   text-shadow: 0 10px 30px #000;
 }
+.focus-mode__target {
+  font-family: var(--display);
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 400;
+  color: #5c5d5a;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.focus-mode__target.is-overrun {
+  color: #8c3d38;
+}
 .focus-mode__timer.is-overrun {
   color: var(--red-bright);
+}
+.focus-mode__hint {
+  position: fixed;
+  bottom: clamp(20px, 3vh, 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  padding: 8px 18px;
+  border: 1px solid #2e3032;
+  border-radius: 6px;
+  background: rgba(8, 9, 10, 0.7);
+  color: #5c5d5a;
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+.focus-mode__hint kbd {
+  border-color: #444;
+  color: #999;
 }
 .focus-mode .gearbox {
   position: relative;

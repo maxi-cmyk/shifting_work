@@ -23,6 +23,8 @@ export function FocusMode({
   onExit: () => void;
   nextTask: Task | null;
 }) {
+  const overrun = elapsed > targetSeconds;
+
   return (
     <main
       className={`focus-mode ${reducedMotion ? 'reduce-motion' : ''}`}
@@ -33,12 +35,17 @@ export function FocusMode({
         Exit focus
       </button>
       <h1 aria-live="polite">{task.title}</h1>
-      <strong
-        className={`focus-mode__timer ${elapsed > targetSeconds ? 'is-overrun' : ''}`}
-        aria-label={`${formatDuration(elapsed)} elapsed`}
-      >
-        {formatDuration(elapsed)}
-      </strong>
+      <div className="focus-mode__timer-group">
+        <strong
+          className={`focus-mode__timer ${overrun ? 'is-overrun' : ''}`}
+          aria-label={`${formatDuration(elapsed)} elapsed`}
+        >
+          {formatDuration(elapsed)}
+        </strong>
+        <span className={`focus-mode__target ${overrun ? 'is-overrun' : ''}`}>
+          / {formatDuration(targetSeconds)}
+        </span>
+      </div>
       <Gearbox
         gear={gear}
         onShift={onShift}
@@ -55,6 +62,10 @@ export function FocusMode({
         </span>
         <Icon name={nextTask ? 'next' : 'check'} />
       </button>
+      <span className="focus-mode__hint">
+        <kbd>1</kbd>–<kbd>6</kbd> shift &nbsp; <kbd>Space</kbd> pause &nbsp; <kbd>Enter</kbd>{' '}
+        complete &nbsp; <kbd>N</kbd> neutral
+      </span>
     </main>
   );
 }

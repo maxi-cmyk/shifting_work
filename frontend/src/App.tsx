@@ -399,10 +399,6 @@ function Cockpit({
 }) {
   return (
     <section className="cockpit panel">
-      <div className="cockpit__topline">
-        <span>Focus transmission</span>
-        <span className="serial">SW—06 / LOCAL</span>
-      </div>
       <div className="session-readout">
         <span className="eyebrow">
           {activeTask
