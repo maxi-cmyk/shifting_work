@@ -51,16 +51,6 @@ export function SettingsView({
           </button>
         </div>
       </div>
-      <aside className="privacy-note">
-        <span className="status-light is-live" />
-        <div>
-          <strong>Local by design</strong>
-          <p>
-            Tasks, preferences, and history stay in this app’s local browser storage. Shiftwork
-            sends nothing to a server.
-          </p>
-        </div>
-      </aside>
     </section>
   );
 }

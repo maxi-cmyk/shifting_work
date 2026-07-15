@@ -196,7 +196,15 @@ export function App() {
           </div>
         )}
 
-        {view === 'history' && <HistoryView history={state.history} />}
+        {view === 'history' && (
+          <HistoryView
+            history={state.history}
+            onClear={() => {
+              if (window.confirm('Clear all session history? This cannot be undone.'))
+                setState((current) => ({ ...current, history: [] }));
+            }}
+          />
+        )}
         {view === 'settings' && (
           <SettingsView
             preferences={state.preferences}
@@ -469,7 +477,7 @@ function Cockpit({
               onClick={() => onShift(activeSession.isRunning ? 0 : (activeTask?.gear ?? 1))}
             >
               <Icon name="pause" />
-              {activeSession.isRunning ? 'Shift to neutral' : 'Resume in planned gear'}
+              {activeSession.isRunning ? 'Pause (Space)' : 'Resume (Space)'}
             </button>
             <button className="text-button text-button--danger" onClick={onAbandon}>
               End session
