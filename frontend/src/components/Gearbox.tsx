@@ -169,8 +169,8 @@ export function Gearbox({
       };
     });
     const timing: KeyframeAnimationOptions = {
-      duration: Math.max(100, (route.length - 1) * 75),
-      easing: 'cubic-bezier(0, 0.7, 0.3, 1)',
+      duration: Math.max(120, (route.length - 1) * 95),
+      easing: 'cubic-bezier(.22,.8,.25,1)',
       fill: 'forwards',
     };
     const animation = lever.animate(keyframes, timing);
@@ -197,19 +197,11 @@ export function Gearbox({
     }
     animationRef.current = animation;
     animation.onfinish = () => {
-      animation.commitStyles();
-      stemAnimation?.commitStyles();
+      applyPoint(target);
+      animation.cancel();
       stemAnimation?.cancel();
       stemAnimationRef.current = null;
       animationRef.current = null;
-
-      const angle = Math.atan2(target.y - 50, target.x - 50) * (180 / Math.PI) + 90;
-      lever.style.setProperty('--lever-angle', `${angle}deg`);
-      lever.classList.toggle(
-        'is-neutral',
-        Math.abs(target.x - 50) < 1 && Math.abs(target.y - 50) < 1,
-      );
-      visualPointRef.current = target;
     };
   };
 
