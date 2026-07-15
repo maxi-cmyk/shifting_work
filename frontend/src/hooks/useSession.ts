@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import {
   createId,
   elapsedSeconds,
@@ -40,9 +40,6 @@ export function useSession({
   setOnboardingShifted,
   sound,
 }: UseSessionParams) {
-  const stateRef = useRef(state);
-  stateRef.current = state;
-
   const activeTask = state.activeSession
     ? (state.tasks.find((task) => task.id === state.activeSession?.taskId) ?? null)
     : null;
@@ -50,9 +47,14 @@ export function useSession({
   const isFocusSessionActive = Boolean(state.activeSession);
 
   useEffect(() => {
-    void window.shiftworkDesktop?.setFullscreen(isFocusSessionActive);
+    window.shiftworkDesktop?.setFullscreen(isFocusSessionActive)?.catch((err: unknown) => {
+      console.warn('Shiftwork: fullscreen toggle failed:', err);
+    });
     return () => {
-      if (isFocusSessionActive) void window.shiftworkDesktop?.setFullscreen(false);
+      if (isFocusSessionActive)
+        window.shiftworkDesktop?.setFullscreen(false)?.catch((err: unknown) => {
+          console.warn('Shiftwork: fullscreen toggle failed:', err);
+        });
     };
   }, [isFocusSessionActive]);
 

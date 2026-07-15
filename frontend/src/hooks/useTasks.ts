@@ -84,7 +84,9 @@ export function useTasks({
 
   const completedCount = state.tasks.filter((task) => task.status === 'completed').length;
   const driveUnlocked = state.tasks.length >= 3;
-  const lastTaskGear = state.tasks.length > 0 ? state.tasks[state.tasks.length - 1].gear : 0;
+  const sortedByPosition = [...state.tasks].sort((a, b) => a.position - b.position);
+  const lastTaskGear =
+    sortedByPosition.length > 0 ? sortedByPosition[sortedByPosition.length - 1].gear : 0;
   const nextSuggestedGear = (lastTaskGear === 0 ? 1 : (lastTaskGear % 6) + 1) as DriveGear;
 
   return {

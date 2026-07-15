@@ -192,14 +192,14 @@ export function Gearbox({
           offset: keyframes[index].offset,
         };
       });
-      stemAnimationRef.current = stem.animate(stemKeyframes, timing);
+      var stemAnimation: Animation = stem.animate(stemKeyframes, timing);
+      stemAnimationRef.current = stemAnimation;
     }
     animationRef.current = animation;
     animation.onfinish = () => {
       animation.commitStyles();
-      animation.cancel();
-      stemAnimationRef.current?.commitStyles();
-      stemAnimationRef.current?.cancel();
+      stemAnimation?.commitStyles();
+      stemAnimation?.cancel();
       stemAnimationRef.current = null;
       animationRef.current = null;
 
