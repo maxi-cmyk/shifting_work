@@ -65,7 +65,6 @@ export function TaskForm({ editingTask, suggestedGear, onSave, onCancelEdit }: T
           <span className="eyebrow">Load the drive</span>
           <h2>{editingTask ? 'Edit task' : 'Add a task'}</h2>
         </div>
-        <span className="section-index">01</span>
       </div>
 
       <label className="field field--wide">

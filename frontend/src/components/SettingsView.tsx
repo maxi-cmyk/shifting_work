@@ -16,7 +16,6 @@ export function SettingsView({
           <span className="eyebrow">Cockpit setup</span>
           <h2>Settings</h2>
         </div>
-        <span className="section-index">03</span>
       </div>
       <div className="settings-list">
         <label>

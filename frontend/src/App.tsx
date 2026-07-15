@@ -299,7 +299,6 @@ function TaskQueue({
           <span className="eyebrow">Route</span>
           <h2>Task queue</h2>
         </div>
-        <span className="section-index">02</span>
       </div>
       {activeTask && (
         <div className="active-queue-item">

@@ -1,4 +1,5 @@
 let ctx: AudioContext | null = null;
+const noiseCache = new Map<number, AudioBuffer>();
 
 function getCtx(): AudioContext | null {
   if (typeof AudioContext === 'undefined') return null;
@@ -11,7 +12,10 @@ function getCtx(): AudioContext | null {
   return ctx;
 }
 
-function noiseBuffer(durationSeconds: number): AudioBuffer | null {
+function getNoiseBuffer(durationSeconds: number): AudioBuffer | null {
+  const cached = noiseCache.get(durationSeconds);
+  if (cached) return cached;
+
   const c = getCtx();
   if (!c) return null;
   const length = Math.max(1, Math.floor(c.sampleRate * durationSeconds));
@@ -20,6 +24,7 @@ function noiseBuffer(durationSeconds: number): AudioBuffer | null {
   for (let i = 0; i < length; i++) {
     data[i] = Math.random() * 2 - 1;
   }
+  noiseCache.set(durationSeconds, buffer);
   return buffer;
 }
 
@@ -32,7 +37,7 @@ function playNoiseBurst(
 ) {
   const c = getCtx();
   if (!c) return;
-  const buffer = noiseBuffer(duration);
+  const buffer = getNoiseBuffer(duration);
   if (!buffer) return;
   const source = c.createBufferSource();
   source.buffer = buffer;
@@ -87,37 +92,58 @@ const GEAR_FREQS: Record<number, number> = {
   6: 720,
 };
 
+function defer(fn: () => void) {
+  setTimeout(fn, 0);
+}
+
 export function createAudio() {
+  getCtx();
+  getNoiseBuffer(0.12);
+  getNoiseBuffer(0.06);
+  getNoiseBuffer(0.05);
+
   return {
     playGateEngage(gear: number) {
-      const freq = GEAR_FREQS[gear] ?? 280;
-      playNoiseBurst(0.12, freq, 2.5, 0.35);
-      playTone(freq * 0.7, 0.09, 0.15, 'triangle', 0.01);
+      defer(() => {
+        const freq = GEAR_FREQS[gear] ?? 280;
+        playNoiseBurst(0.12, freq, 2.5, 0.35);
+        playTone(freq * 0.7, 0.09, 0.15, 'triangle', 0.01);
+      });
     },
 
     playNeutralClick() {
-      playNoiseBurst(0.06, 3000, 1.2, 0.18, 'highpass');
-      playTone(1600, 0.04, 0.08, 'sine', 0.005);
+      defer(() => {
+        playNoiseBurst(0.06, 3000, 1.2, 0.18, 'highpass');
+        playTone(1600, 0.04, 0.08, 'sine', 0.005);
+      });
     },
 
     playSessionStart() {
-      playTone(330, 0.15, 0.22, 'triangle', 0);
-      playTone(392, 0.18, 0.22, 'triangle', 0.1);
+      defer(() => {
+        playTone(330, 0.15, 0.22, 'triangle', 0);
+        playTone(392, 0.18, 0.22, 'triangle', 0.1);
+      });
     },
 
     playSessionEnd() {
-      playTone(392, 0.15, 0.22, 'triangle', 0);
-      playTone(330, 0.18, 0.22, 'triangle', 0.1);
+      defer(() => {
+        playTone(392, 0.15, 0.22, 'triangle', 0);
+        playTone(330, 0.18, 0.22, 'triangle', 0.1);
+      });
     },
 
     playRecommendation() {
-      playTone(800, 0.35, 0.12, 'sine', 0);
-      playTone(1000, 0.25, 0.08, 'sine', 0.06);
+      defer(() => {
+        playTone(800, 0.35, 0.12, 'sine', 0);
+        playTone(1000, 0.25, 0.08, 'sine', 0.06);
+      });
     },
 
     playShiftClick() {
-      playNoiseBurst(0.05, 220, 4, 0.25);
-      playTone(180, 0.03, 0.12, 'triangle', 0.003);
+      defer(() => {
+        playNoiseBurst(0.05, 220, 4, 0.25);
+        playTone(180, 0.03, 0.12, 'triangle', 0.003);
+      });
     },
   };
 }

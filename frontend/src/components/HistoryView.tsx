@@ -14,7 +14,6 @@ export function HistoryView({
           <span className="eyebrow">Local logbook</span>
           <h2>Recent sessions</h2>
         </div>
-        <span className="section-index">{String(history.length).padStart(2, '0')}</span>
       </div>
       {history.length === 0 ? (
         <div className="empty-state empty-state--large">
@@ -53,7 +52,7 @@ export function HistoryView({
               </div>
             ))}
           </div>
-          <div className="history-actions">
+          <div className="history-actions panel">
             <button className="text-button text-button--danger" onClick={onClear}>
               Clear history
             </button>

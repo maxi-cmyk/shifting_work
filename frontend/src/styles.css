@@ -293,12 +293,6 @@ kbd {
 .section-heading h2 {
   font-size: 22px;
 }
-.section-index {
-  color: #4f504d;
-  font-family: var(--display);
-  font-size: 27px;
-  font-weight: 500;
-}
 .field {
   display: grid;
   gap: 7px;
@@ -1348,9 +1342,12 @@ kbd {
   accent-color: var(--red);
 }
 .history-actions {
-  margin-top: 16px;
+  margin-top: 20px;
+  padding: 16px 18px;
   display: flex;
   justify-content: flex-end;
+  border: 1px solid #3d2d2b;
+  background: rgba(216, 64, 50, 0.06);
 }
 
 .onboarding-backdrop {
